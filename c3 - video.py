@@ -2,7 +2,7 @@ import cv2
 import subprocess
 import sys
 
-def face_detect(input_video_name):
+def face_detect(input_video_name,mode):
     ''' This function takes an input photo name
     and an output photo name and distinguishes the face
     from the input photo and draws a square around the face
@@ -29,7 +29,17 @@ def face_detect(input_video_name):
         faces = faceCascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors = 4)
 
         for (x,y,w,h) in faces:
-            cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,255),2)
+            if mode == "circle":
+                center_coordinates = (int(x+w/2),int(y+h/2))
+                radius = int(w/2+5)
+                color = (0,0,255)
+                thickness = 2
+                our_image_circle = cv.circle(img, center_coordinates, radius, color, thickness)
+            elif mode == "rectangle":
+                our_image_rect = cv.rectangle(img,(x,y),(x+w,y+h),(0,255,255),2)
+            else:
+                print('mode is invalid')
+
     
         cv2.imshow('video', img)
         if ret == True:
@@ -40,4 +50,4 @@ def face_detect(input_video_name):
     output_src.release()
     cap.release()
     cv2.destroyAllWindows()
-face_detect("a.mp4")
+face_detect("a.mp4","circle")
